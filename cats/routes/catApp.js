@@ -1,117 +1,170 @@
 var express = require('express');
 var router = express.Router();
-var db = require('../fakeDatabase');
+var cat = require('../models/catModel');
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/cats');
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+
 
 var catapp = {}
 
-//function that constructs and returns lizard object
-catapp.Cat = function(name, age, color){
-  var cat = {
-    name: name,
-    age: age,
-    color: color
-  };
-  return cat;
-}
+
+//working
 catapp.getCats = function(req, res){
 //get all lizard names
-    var cats = db.getAll();
-    var msg = "Cats: ";
-    var catAge = cats.sort(function(a,b){return a.age - b.age});
-    catAge.forEach(function(liz){
-      msg = msg + "name: " + liz.name + "," + " age: " + liz.age + "," + " color: " + liz.color + "| ";
-    })
-    res.render("viewCats", {"cats": [
-    {name: msg}]
-    });
- };
 
+  var callback = function(req, res){
+    return function(err, cats){
+      if (err){
+        console.log('error occured');
+        return;
+      }
+      res.render("viewCats", {"cats": cats});
+    }
+  }
+  cat.find(callback(req, res))
+}
+
+
+
+//working
 catapp.add = function(req, res){
-// create new lizard named Bob   
+// create new lizard named Bob  
+
   var name = '';
   var color = '';
   var age = Math.floor(Math.random() * (100 - 1)) + 1;
   var names = ['bart', 'heath', 'nuget'];
   var colors = ['red', 'blue', 'yellow', 'green']
-  var randn = Math.floor(Math.random() * (3 - 0)) + 0;
-  var randc = Math.floor(Math.random() * (4 - 0)) + 0;
+  //var randn = Math.floor(Math.random() * (3 - 0)) + 0;
+  var randn = Math.floor(Math.random() * 3);
+  var randc = Math.floor(Math.random() * 4);
   name += names[randn]
   color += colors[randc]
-  var newCat = catapp.Cat(name, age, color);
-  db.add(newCat);
-  res.render("add", newCat
+  fluffy = new cat({name: name, age: age, color: color});
+  //var newCat = catapp.Cat(name, age, color);
+  fluffy.save(function (err) {
+    if (err) return console.error(err);
+  });
+  //db.add(newCat);
+  res.render("add", fluffy
   );
 };
-
+//working
 catapp.remove = function(req, res) {
-  catName = db.data[db.data.length-1].name
-  db.remove(db.data.length-1);
-  res.render("remove", {"cats": [
-   {name: catName}]
- });
-};
+  cat.findOneAndRemove({}, {sort: {age: -1}}, function(err, cats) {
+    if (err) {
+      res.status(500).send("Something broke!");
+    } else {
+        var oldcat = cats.name;
+        var oldage = cats.age
+        res.render("remove", {"cats": [
+        {name: oldcat, age: oldage}]
+        });
+      };
+    });
+  };
+
+
+
+
 
 catapp.sortedy = function(req, res) {
-  var sortCats = db.getAll();
-  var colored = [];
-  for (var i = 0; i < sortCats.length; i++) {
-    if (sortCats[i].color == 'yellow') {
-      colored.push(sortCats[i]);
-    }
+    var callback = function(req, res){
+    return function(err, cats){
+      if (err){
+        console.log('error occured');
+        return;
+      }
+
+      var tot = []
+      for (var i = 0; i < cats.length; i++) {
+        tot.push(cats[i]) }
+      tot = tot.sort(function(a,b){return a.age - b.age})
+      res.render("sorted", {"cats": tot});
+    }   
   }
-  //var sortCats = sortCats.sort(function(a,b){return a.color - b.color})
-  //var keysSorted = sortCats.sort(function(a,b){return a.age - b.age});
-  var keysSorted = colored.sort(function(a,b){return a.age - b.age});
+  cat.find({ 'color': 'yellow' }, 'name age color', callback(req, res))
 
-  res.send(keysSorted);
-  //res.render("sorted", keysSorted);
-};
-
-catapp.sortedr = function(req, res) {
-  var sortCats = db.getAll();
-  var colored = [];
-  for (var i = 0; i < sortCats.length; i++) {
-    if (sortCats[i].color == 'red') {
-      colored.push(sortCats[i]);
-    }
-  }
-  //var sortCats = sortCats.sort(function(a,b){return a.color - b.color})
-  //var keysSorted = sortCats.sort(function(a,b){return a.age - b.age});
-  var keysSorted = colored.sort(function(a,b){return a.age - b.age});
-
-  res.send(keysSorted);
-  //res.render("sorted", keysSorted);
-
-};
-
-catapp.sortedg = function(req, res) {
-  var sortCats = db.getAll();
-  var colored = [];
-  for (var i = 0; i < sortCats.length; i++) {
-    if (sortCats[i].color == 'green') {
-      colored.push(sortCats[i]);
-    }
-  }
-  var keysSorted = colored.sort(function(a,b){return a.age - b.age});
-
-
-  res.send(keysSorted);
-};
+}
 
 catapp.sortedb = function(req, res) {
-  var sortCats = db.getAll();
-  var colored = [];
-  for (var i = 0; i < sortCats.length; i++) {
-    if (sortCats[i].color == 'blue') {
-      colored.push(sortCats[i]);
-    }
+    var callback = function(req, res){
+    return function(err, cats){
+      if (err){
+        console.log('error occured');
+        return;
+      }
+
+      var tot = []
+      for (var i = 0; i < cats.length; i++) {
+        tot.push(cats[i]) }
+      tot = tot.sort(function(a,b){return a.age - b.age})
+      res.render("sorted", {"cats": tot});
+    }   
   }
-  var keysSorted = colored.sort(function(a,b){return a.age - b.age});
+  cat.find({ 'color': 'blue'}, 'name age color', callback(req, res))
 
-  res.send(keysSorted);
-  //res.("sorted", keysSorted);
-};
+}
+//sorts for blue and bart named cats
+catapp.sortedbb = function(req, res) {
+    var callback = function(req, res){
+    return function(err, cats){
+      if (err){
+        console.log('error occured');
+        return;
+      }
 
+      var tot = []
+      for (var i = 0; i < cats.length; i++) {
+        tot.push(cats[i]) }
+      tot = tot.sort(function(a,b){return a.age - b.age})
+      res.render("sorted", {"cats": tot});
+    }   
+  }
+  cat.find({ 'color': 'blue', 'name': 'bart'}, 'name age color', callback(req, res))
+
+}
+
+
+catapp.sortedg = function(req, res) {
+    var callback = function(req, res){
+    return function(err, cats){
+      if (err){
+        console.log('error occured');
+        return;
+      }
+
+      var tot = []
+      for (var i = 0; i < cats.length; i++) {
+        tot.push(cats[i]) }
+      tot = tot.sort(function(a,b){return a.age - b.age})
+      res.render("sorted", {"cats": tot});
+    }   
+  }
+  cat.find({ 'color': 'green' }, 'name age color', callback(req, res))
+
+}
+
+catapp.sortedr = function(req, res) {
+    var callback = function(req, res){
+    return function(err, cats){
+      if (err){
+        console.log('error occured');
+        return;
+      }
+
+      var tot = []
+      for (var i = 0; i < cats.length; i++) {
+        tot.push(cats[i]) }
+      tot = tot.sort(function(a,b){return a.age - b.age})
+      res.render("sorted", {"cats": tot});
+    }   
+  }
+  cat.find({ 'color': 'red' }, 'name age color', callback(req, res))
+
+}
 
 
 module.exports = catapp;

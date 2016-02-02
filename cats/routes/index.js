@@ -12,7 +12,8 @@ index.home = function(req, res){
   {link: "/sorty"},
   {link: "/sortb"},
   {link: "/sortr"},
-  {link: "/sortg"}]
+  {link: "/sortg"},
+  {link: "/sortbb"}]
 });
 };
 //var getAll = function(req, res, next){

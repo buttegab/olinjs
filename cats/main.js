@@ -24,6 +24,7 @@ app.get('/show', cats.getCats);
 app.get('/sorty', cats.sortedy);
 app.get('/sortg', cats.sortedg);
 app.get('/sortb', cats.sortedb);
+app.get('/sortbb', cats.sortedbb);
 app.get('/sortr', cats.sortedr);
 
 app.listen(3000);

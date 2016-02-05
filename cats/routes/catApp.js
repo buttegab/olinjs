@@ -57,6 +57,8 @@ catapp.remove = function(req, res) {
     if (err) {
       res.status(500).send("Something broke!");
     } else {
+      // Ooops be careful here - what happens when there are no cats and you try to remove one? Handle that null exception
+      // There is no property of name to cats.
         var oldcat = cats.name;
         var oldage = cats.age
         res.render("remove", {"cats": [
@@ -107,6 +109,10 @@ catapp.sortedb = function(req, res) {
   cat.find({ 'color': 'blue'}, 'name age color', callback(req, res))
 
 }
+
+// There is a repetition of the methods below that can be avoided. Instead of sorting 
+// for each seperate color you can parametarize the input path and handle that in your API (look for mongoose req.params)
+
 //sorts for blue and bart named cats
 catapp.sortedbb = function(req, res) {
     var callback = function(req, res){

@@ -1,9 +1,11 @@
 var express = require('express');
 var router = express.Router();
 var ing = require('../models/ingredientModel');
+var ord = require('../models/orderModel')
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/burger');
 var db = mongoose.connection;
+//mongoose.connect('mongodb://localhost/order');
 db.on('error', console.error.bind(console, 'connection error:'));
 
 
@@ -25,6 +27,19 @@ burger.getIngredients = function(req, res){
   ing.find(callback(req, res))
 };
 
+burger.getOrder = function(req, res){
+
+  var callback = function(req, res){
+    return function(err, ingredients){
+      if (err){
+        console.log('error occured');
+        return;
+      };
+      res.render("order", {"ingredients": ingredients});
+    };
+  }
+  ing.find(callback(req, res))
+};
 
 
 // burger.add = function(req, res) {
@@ -90,6 +105,8 @@ burger.edit = function(req,res) {
   res.send(das);
   //res.send(req.query.val);
 }
+
+
 
 
 //working

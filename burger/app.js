@@ -7,6 +7,7 @@ var express = require('express');
 var index = require('./routes/index');
 var app = express();
 var burger = require('./routes/burger');
+var order = require('./routes/order');
 
 
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));
@@ -25,6 +26,10 @@ app.get('/disable', burger.getdisable);
 app.post('/disable', burger.disable);
 app.get('/edit', burger.getedit);
 app.post('/edit', burger.edit);
+app.get('/order', burger.getOrder);
+app.get('/orderdb', order.orderdb);
+app.get('/kitchen', order.kitchen);
+app.get('/totals', order.totals);
 
 
 //app.get('/remove', cats.remove);

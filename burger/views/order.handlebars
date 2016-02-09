@@ -1,0 +1,19 @@
+<h1>Burger Order</h1>
+
+<h2>Place your order</h2>
+
+<form id = "ajax-form3" method="GET">
+{{#each ingredients}}
+    <li>
+    <input id = {{this.price}} type="checkbox" name={{this.name}} <ul>{{this.name}}: {{this.price}}$</ul> 
+    </li>
+{{/each}}
+<ul id = "total">Total: 0$ </ul>
+<button type="submit" value="Add">Add</button><br/>
+</form>
+
+
+
+
+<a href="/">Ingredients</a> 
+<a href="/kitchen">Kitchen</a>

@@ -14,23 +14,17 @@ var onSuccess2 = function(data, status) {
 };
 
 var onSuccess3 = function(data, status) {
-  //$("ul[id|='"+data[0]+"'").replaceWith("<ul id = {{"+data[1]+"}}>{{"+data[1]+"}}</ul>")
-  //console.log("it ran");
   $("ul[id|='"+data.name+"']").replaceWith("<ul id='"+data.val+"'>"+data.val+": "+data.val2+"$</ul>")
-  //$("ul[id|='ansm'").replaceWith("<ul> here comes data:"+data.val+" it was right there</ul>")
-  //console.log("for real");
 };
 
-// var onSuccess4 = function(data, status) {
-//   $("button[value|='oos2']").prop('disabled', true);
-//   $("button[value|='Edit2']").prop('disabled', true);
-//   $("input[name|='ingredient2']").prop('disabled', true);
-//   $("input[name|='edit2']").prop('disabled', true);
-// };
+var onSuccess4 = function(data, status) {
+  console.log(data.name);
+  console.log(data.price);
+};
 
-// var onSuccess5 = function(data, status) {
-//   $("button[value|='oos2']").prop('disabled', true);
-// };
+var onSuccess5 = function(data, status) {
+  $("ul[id|='total']").replaceWith("<ul id='total'>Total: "+data+"$</ul>")
+};
 
 var onError = function(data, status) {
   console.log("status", status);
@@ -90,18 +84,49 @@ $("button[value|='Edit1']").click(function(event) {
     .error(onError);
 });
 
-// $form4.submit(function(event) {
-//   event.preventDefault();
-//   var mood = $form4.find("[name='custom']").val();
-//   //var name = $form.find("[name='name']").val();
-//   //linked to the app.js get call
-//   $.get("disable", {
-//     mood: mood//,
-//     //name: name
-//   })
-//     .done(onSuccess4)
-//     .error(onError);
-// });
+$form3.submit(function(event) {
+  event.preventDefault();
+  var allVals = [];
+  var allPrice = 0;
+  $form3.find("input:checked").each(function() {
+    //allVals.push($(this).text());
+    allVals.push($(this).attr("name"));
+  });
+  $form3.find("input:checked").each(function() {
+    //allVals.push($(this).text());
+    allPrice += Number($(this).attr("id"));
+  });
+  //for (var i = 0; i< $form3.find("input:checked").length; i++ )
+    //$( "input:checked" ).length
+  //var checked = $form3.find("input:checked");
+  console.log(allVals);
+  console.log(allPrice);
+  var checked = allVals;
+  //var name = $form.find("[name='name']").val();
+  //linked to the app.js get call
+  $.get("orderdb", {
+    checked: checked,
+    allPrice: allPrice
+  })
+    .done(onSuccess4)
+    .error(onError);
+});
+
+
+$("input[type=checkbox]").click(function(event) {
+  //event.preventDefault();
+  console.log("tried");
+  var total = 0;
+  $form3.find("input:checked").each(function() {
+    //allVals.push($(this).text());
+    total += Number($(this).attr("id"));
+  });
+$.get("totals", {
+    total: total
+  })
+    .done(onSuccess5)
+    .error(onError);
+});
 
 // $form5.submit(function(event) {
 //   event.preventDefault();

@@ -5,10 +5,11 @@
 <form id = "ajax-form2" method="GET">
 {{#each ingredients}}
     <li>
-    <ul id = {{this.name}}>{{this.name}}</ul>
+    <ul id = {{this.name}}>{{this.name}}: {{this.price}}$</ul>
     <button type="submit" value="Edit1" name = {{this.name}}>Edit</button>
     <button type="submit" value = "oos" name = {{this.name}}>Out of Stock</button>
     <input type="text" name={{this.name}} />
+    <input id = {{this.name}} type="text"/>
     </li>
 {{/each}}
 </form>
@@ -17,6 +18,7 @@
 <div id="result">
 </div>
   Add Ingredient (product: cost): <input type="text" name="custom"/> 
+  <input type="text" name="customPrice"/> 
   <button type="submit" value="Add">Add</button><br/>
 </form>
 

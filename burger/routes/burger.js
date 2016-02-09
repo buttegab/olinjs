@@ -38,11 +38,14 @@ burger.getIngredients = function(req, res){
 // };
 
 burger.getadd = function(req, res) {
-  newIng = new ing({name: req.query.name, stock: "true"});
+  newIng = new ing({name: req.query.name, stock: "true", price: req.query.price});
     newIng.save(function (err) {
       if (err) return console.error(err);
     });
-  res.send(req.query.name);
+  
+  vas = {name:req.query.name, price: req.query.price}
+  res.send(vas);
+  //res.send(req.query.name);
   //res.render("home", {"ingredients": newIng.name});
 }
 
@@ -66,12 +69,12 @@ burger.getdisable = function(req, res) {
 }
 
 burger.getedit = function(req,res) {
-  ing.update({name: req.query.name},{$set:{name: req.query.val}}, function(err, cats) {
+  ing.update({name: req.query.name},{$set:{name: req.query.val, price: req.query.val2}}, function(err, cats) {
     if (err) {
       res.status(500).send("Something broke!");
       };
     });
-  var das = {name: req.query.name, val: req.query.val}
+  var das = {name: req.query.name, val: req.query.val, val2: req.query.val2}
   //res.send(req.query.val);
   res.send(das);
 

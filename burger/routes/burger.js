@@ -12,15 +12,14 @@ var burger = {}
 
 // //working
 burger.getIngredients = function(req, res){
-//get all lizard names
 
   var callback = function(req, res){
-    return function(err, cats){
+    return function(err, ingredients){
       if (err){
         console.log('error occured');
         return;
       };
-      res.render("viewCats", {"cats": cats});
+      res.render("home", {"ingredients": ingredients});
     };
   }
   ing.find(callback(req, res))
@@ -28,31 +27,67 @@ burger.getIngredients = function(req, res){
 
 
 
-burger.add = function(req, res) {
-  if (req.xhr) {
-    newIng = new ing({name: req.body.name});
+// burger.add = function(req, res) {
+//   if (req.xhr) {
+//     newIng = new ing({name: req.body.name, stock: "true"});
+//     newIng.save(function (err) {
+//       if (err) return console.error(err);
+//     });
+//     res.send(req.body.name);
+//   }
+// };
+
+burger.getadd = function(req, res) {
+  newIng = new ing({name: req.query.name, stock: "true"});
     newIng.save(function (err) {
       if (err) return console.error(err);
     });
-    res.send(req.body.name);
-  }
-};
-
-burger.getadd = function(req, res) {
   res.send(req.query.name);
+  //res.render("home", {"ingredients": newIng.name});
 }
 
 burger.disable = function(req,res) {
-  if (req.xhr) {
-    res.send("done");
-  } else {
-    return
-  }
+    ing.findOneAndRemove({name: req.query.name}, {name: req.query.name}, function(err, cats) {
+    if (err) {
+      res.status(500).send("Something broke!");
+      };
+    });
+  res.send(req.query.name);
 };
 
 burger.getdisable = function(req, res) {
-  res.send("done");
+  //ing.Remove({name: req.query.name}, function(err, cats) {
+    ing.findOneAndRemove({name: req.query.name}, {name: req.query.name}, function(err, cats) {
+    if (err) {
+      res.status(500).send("Something broke!");
+      };
+    });
+  res.send(req.query.name);
 }
+
+burger.getedit = function(req,res) {
+  ing.update({name: req.query.name},{$set:{name: req.query.val}}, function(err, cats) {
+    if (err) {
+      res.status(500).send("Something broke!");
+      };
+    });
+  var das = {name: req.query.name, val: req.query.val}
+  //res.send(req.query.val);
+  res.send(das);
+
+}
+
+burger.edit = function(req,res) {
+  ing.update({name: req.body.name},{$set:{name: req.body.val}}, function(err, cats) {
+  if (err) {
+      res.status(500).send("Something broke!");
+      };
+    });
+  var das = [req.query.name, req.query.val]
+  res.send(das);
+  //res.send(req.query.val);
+}
+
 
 //working
 // burger.add = function(req, res){

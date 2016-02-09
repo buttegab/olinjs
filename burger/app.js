@@ -18,10 +18,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-//app.get('/', index.home);
+
 app.get('/', burger.getIngredients);
 app.get('/add', burger.getadd);
-//app.post('/add', burger.add);
 app.get('/disable', burger.getdisable);
 app.post('/disable', burger.disable);
 app.get('/edit', burger.getedit);
@@ -30,14 +29,7 @@ app.get('/order', burger.getOrder);
 app.get('/orderdb', order.orderdb);
 app.get('/kitchen', order.kitchen);
 app.get('/totals', order.totals);
+app.get('/complete', order.comp);
 
-
-//app.get('/remove', cats.remove);
-// app.get('/show', cats.getCats);
-// app.get('/sorty', cats.sortedy);
-// app.get('/sortg', cats.sortedg);
-// app.get('/sortb', cats.sortedb);
-// app.get('/sortbb', cats.sortedbb);
-// app.get('/sortr', cats.sortedr);
 
 app.listen(3000);

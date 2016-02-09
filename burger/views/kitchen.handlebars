@@ -5,7 +5,7 @@
 <form id = "ajax-form4" method="GET">
 {{#each orders}}
     <li id = {{this.price}} name = {{this.name}}> {{this.name}}: {{this.price}}$  </li>
-    <button type="submit" name = {{this.name}} value="Complete">Complete</button><br/>
+    <button type="submit" name = {{this.id}} value="Complete">Complete</button><br/>
 {{/each}}
 
 </form>

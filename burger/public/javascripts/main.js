@@ -26,6 +26,10 @@ var onSuccess5 = function(data, status) {
   $("ul[id|='total']").replaceWith("<ul id='total'>Total: "+data+"$</ul>")
 };
 
+var onSuccess6 = function(data, status) {
+  $("button[name|='"+data+"']").prop('disabled', true);
+};
+
 var onError = function(data, status) {
   console.log("status", status);
   console.log("error", data);
@@ -128,15 +132,18 @@ $.get("totals", {
     .error(onError);
 });
 
-// $form5.submit(function(event) {
-//   event.preventDefault();
-//   var mood = $form5.find("[name='custom']").val();
-//   //var name = $form.find("[name='name']").val();
-//   //linked to the app.js get call
-//   $.get("disable", {
-//     mood: mood//,
-//     //name: name
-//   })
-//     .done(onSuccess5)
-//     .error(onError);
-// });
+
+$("button[value|='Complete']").click(function(event) {
+//$form4.submit(function(event) {
+  event.preventDefault();
+  //var name = $form4.find( "button[type='submit']" ).attr("name");
+  var name = $(this).attr("name");  
+  console.log(name);
+  $.get("complete", {
+    name: name
+  })
+    .done(onSuccess6)
+    .error(onError);
+});
+
+

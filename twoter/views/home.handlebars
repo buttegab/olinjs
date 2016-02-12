@@ -1,0 +1,18 @@
+<h1>Twoter</h1>
+
+<h2>Post ur stuffs</h2>
+
+<form id = "ajax-form2" method="GET">
+{{#each loggedIn}}
+    <ul id = {{this}}>{{this}}</ul>
+{{/each}}
+
+Users: <br/>
+{{#each user}}
+    <ul id = {{this.name}}>{{this.name}}</ul>
+{{/each}}
+</form>
+
+
+
+<a href="/login">Login</a> 

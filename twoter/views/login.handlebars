@@ -1,0 +1,12 @@
+<form id = "ajax-form" action="add" method="POST">
+Users:
+{{#each user}}
+    <ul id = {{this.name}}>{{this.name}}</ul>
+{{/each}}
+<div id="result">
+</div>
+<li>Username: <input type="text" name="username"/><br/> 
+
+<input type="submit">
+</form>
+<a href="/">Home</a>

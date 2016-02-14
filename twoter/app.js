@@ -23,6 +23,8 @@ app.get('/', twote.getUsers);
 app.get('/login', twote.login);
 app.get('/newUser', twote.addUser)
 app.get('/logout', twote.logout)
+app.get('/getLogged', twote.getLogged)
+app.get('/addPost', twote.addPost)
 // app.get('/disable', burger.getdisable);
 //app.post('/disable', burger.disable);
 // app.get('/edit', burger.getedit);

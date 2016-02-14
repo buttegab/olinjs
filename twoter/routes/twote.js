@@ -1,8 +1,9 @@
 var express = require('express');
 var router = express.Router();
 var usr= require('../models/userModel');
-var ord = require('../models/postModel')
+var post = require('../models/postModel')
 var mongoose = require('mongoose');
+//var timestamps = require "mongoose-times"
 mongoose.connect('mongodb://localhost/twote');
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
@@ -20,8 +21,27 @@ twote.getUsers = function(req, res){
         console.log('error occured');
         return;
       };
-      res.render("home", {"user": users});
+      var callback2 = function(req, res){
+        return function(err, posts){
+          if (err){
+            console.log('error occured');
+          return;
+        };
+        var results = {"user": users, "post": posts}
+        //res.render("home", {"user": users});
+        res.render("home", {"result": results});
+     };
+  }
+
+      //res.render("home", {"user": users});
+      // post.find({}, {sort: {created: -1}}, callback2(req, res))
+      post.find({}, null, {sort: '-created'}, callback2(req, res))
+      // Room.find({}, null, {sort: '-date'}, function(err, docs)
+
+      //res.render("home", {"user": users});
     };
+    
+    //post.find(callback2(req, res))
   }
   usr.find(callback(req, res))
 };
@@ -52,15 +72,40 @@ twote.addUser = function(req, res) {
 }
 
 twote.logout = function(req,res) {
-  ing.update({name: req.query.name},{$set:{logged: false}}, function(err, cats) {
+  usr.update({logged: true},{$set:{logged: false}}, function(err, cats) {
     if (err) {
       res.status(500).send("Something broke!");
       };
+    res.send(cats);
     });
-  res.send(req.query.name);
+  
+}
+
+twote.getLogged = function(req, res) {
+  var callback = function(req, res){
+    return function(err, users){
+      if (err){
+        console.log('error occured');
+        return;
+      };
+      res.send(users);
+    };
+  }
+  usr.find({ 'logged': true },callback(req, res))
 }
 
 
+twote.addPost = function(req, res) {
+  newPost = new post({author: req.query.author, post: req.query.post});
+    newPost.save(function (err) {
+      if (err) return console.error(err);
+    });
+  
+  vas = {author:req.query.author, post: req.query.post};
+  //res.render("home", {"loggedIn": req.query.name});
+
+  res.send(vas);
+}
 
 // burger.getOrder = function(req, res){
 

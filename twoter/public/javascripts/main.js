@@ -9,18 +9,35 @@ var onSuccess = function(data, status) {
   $("#result").append("<div id='result'> user "+data+" added.</div>");
 };
 
-// var onSuccess2 = function(data, status) {
-//   $("button[name|='"+data+"']").prop('disabled', true);
-// };
+var onSuccess2 = function(data, status) {
+  //console.log(data[0].name)
+  if (data.length != 0) {
+    var z = "";
+      for (var i = 0; i < data.length; i++) {
+        z += data[i].name+' ';
+      }
+    //$("#user").replaceWith("<h3 id = 'user'>"+z+"</h3>")
+    $("#user").replaceWith("<h3 id = '"+z+"'>"+z+"</h3>")
 
-// var onSuccess3 = function(data, status) {
-//   $("ul[id|='"+data.name+"']").replaceWith("<ul id='"+data.val+"'>"+data.val+": "+data.val2+"$</ul>")
-// };
+}
+else {
+  $("#user").replaceWith("<h3 id = 'user'> Please log in</h3>")
+  $("button[value|='twote']").prop('disabled', true);
 
-// var onSuccess4 = function(data, status) {
-//   console.log(data.name);
-//   console.log(data.price);
-// };
+}
+
+};
+
+var onSuccess3 = function(data, status) {
+  $("li[id|='logout']").replaceWith("<li id = 'logout'>user logged out</li>")
+  //console.log("worked")
+};
+
+var onSuccess4 = function(data, status) {
+  $("li[id|='posts']").prepend("<li id = '"+data.author+"'>post: "+data.author+" posted: "+data.post+"</li>")
+  console.log(data.post)
+  
+};
 
 // var onSuccess5 = function(data, status) {
 //   $("ul[id|='total']").replaceWith("<ul id='total'>Total: "+data+"$</ul>")
@@ -46,6 +63,51 @@ $form1.submit(function(event) {
     .done(onSuccess)
     .error(onError);
 });
+
+
+
+
+$("input[name|='twote']").on("click", function(){
+  $.get("getLogged")
+  .done(onSuccess2)
+  .error(onError);
+});
+
+
+$form2.submit(function(event) {
+  event.preventDefault();
+  //var name = $form1.find("[type='submit']").val();
+  
+  //console.log(name);
+  $.get("logout", {
+    name: name
+  })
+    .done(onSuccess3)
+    .error(onError);
+});
+
+$("button[value|='twote']").on("click",function(event) {
+  event.preventDefault();
+  //var name = $form1.find("[type='submit']").val();
+  //var author = $("h3[id|='user']").val();
+  var author = $("h3").attr("id");
+
+  var post = $("input[name|='twote']").val();
+  //console.log("clicked!")
+  console.log("this"+author);
+  $.get("addPost", {
+    author: author,
+    post: post
+  })
+    .done(onSuccess4)
+    .error(onError);
+});
+
+
+// $(document).on("pagecontainerload",function(){
+//   alert("pagecontainerload event fired!");
+// });
+
 //form is the home.handlebars form done
 // $("button[value|='oos']").click(function(event) {
 //   event.preventDefault();

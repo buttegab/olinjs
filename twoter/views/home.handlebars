@@ -1,18 +1,28 @@
+<!DOCTYPE html>
 <h1>Twoter</h1>
 
 <h2>Post ur stuffs</h2>
 
+<h3 id = 'user'></h3>
+<li><button type="button" value="twote">Twote</button> <input type="text" name="twote"/> </li> 
+
 <form id = "ajax-form2" method="GET">
-{{#each loggedIn}}
-    <ul id = {{this}}>{{this}}</ul>
-{{/each}}
+
 
 Users: <br/>
-{{#each user}}
+{{#each result.user}}
     <ul id = {{this.name}}>{{this.name}}</ul>
 {{/each}}
+Posts:
+{{#each result.post}}
+    <ul id = {{this.author}}>this guy {{this.author}}Twoted: {{this.post}}</ul>
+{{/each}}
+<li id = 'logout'></li>
+<button type="submit" value="Logout">Logout</button><br/>
 </form>
+<form id = "ajax-form3" method="GET">
+<li id = "posts"></id>
+</form>
+<a href="/login">Login</a>
 
 
-
-<a href="/login">Login</a> 

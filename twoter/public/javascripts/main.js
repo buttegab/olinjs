@@ -39,9 +39,12 @@ var onSuccess4 = function(data, status) {
   
 };
 
-// var onSuccess5 = function(data, status) {
-//   $("ul[id|='total']").replaceWith("<ul id='total'>Total: "+data+"$</ul>")
-// };
+var onSuccess5 = function(data, status) {
+  //$("button[value|='"+data.post+"']").prop('disabled', true);
+  $("button[value|='"+data.post+"']").hide();
+  $("ul[name|='"+data.post+"']").replaceWith("");
+  
+};
 
 // var onSuccess6 = function(data, status) {
 //   $("button[name|='"+data+"']").prop('disabled', true);
@@ -103,6 +106,27 @@ $("button[value|='twote']").on("click",function(event) {
     .error(onError);
 });
 
+
+$("button[id|='remove']").on("click",function(event) {
+  event.preventDefault();
+  //var name = $form1.find("[type='submit']").val();
+  //var author = $("h3[id|='user']").val();
+  var author = $(this).attr("name");
+  var post = $(this).attr("value");
+  console.log("I tried");
+  console.log(author);
+  console.log(post);
+  //var post = $("input[name|='twote']").val();
+  //console.log("clicked!")
+  //console.log("this"+author);
+  
+  $.get("removePost", {
+    author: author,
+    post: post
+  })
+    .done(onSuccess5)
+    .error(onError);
+});
 
 // $(document).on("pagecontainerload",function(){
 //   alert("pagecontainerload event fired!");

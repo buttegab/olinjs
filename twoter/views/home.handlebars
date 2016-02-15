@@ -1,4 +1,7 @@
 <!DOCTYPE html>
+<html lang="en">
+
+<body>
 <h1>Twoter</h1>
 
 <h2>Post ur stuffs</h2>
@@ -15,7 +18,8 @@ Users: <br/>
 {{/each}}
 Posts:
 {{#each result.post}}
-    <ul id = {{this.author}}>this guy {{this.author}}Twoted: {{this.post}}</ul>
+    <ul id = {{this.author}} name = {{this.post}}>this guy: {{this.author}}Twoted: {{this.post}}</ul>
+    <button type="button" id = "remove" name = {{this.author}} value="{{this.post}}" >Remove</button>
 {{/each}}
 <li id = 'logout'></li>
 <button type="submit" value="Logout">Logout</button><br/>
@@ -24,5 +28,6 @@ Posts:
 <li id = "posts"></id>
 </form>
 <a href="/login">Login</a>
-
+</body>
+</html>
 

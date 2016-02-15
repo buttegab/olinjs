@@ -107,6 +107,56 @@ twote.addPost = function(req, res) {
   res.send(vas);
 }
 
+twote.removePost = function(req, res) {
+  //ing.Remove({name: req.query.name}, function(err, cats) {
+  var log = false;
+
+  var callback = function(req, res){
+    return function(err, users){
+      if (err){
+        console.log('error occured');
+        return;
+      };
+      //res.render("login", {"user": users});
+
+    for (var i = 0; i < users.length; i++){
+      if(users[i].name == req.query.author) {
+        log = true;
+      }
+  }
+
+  if(log == true) { 
+    post.findOneAndRemove({post: req.query.post}, {author: req.query.author}, function(err, cats) {
+    if (err) {
+      res.status(500).send("Something broke!");
+      };
+    });
+  vas = {author:req.query.author, post: req.query.post};
+  res.send(vas);
+  }
+}
+
+//end
+    };
+    usr.find({ 'logged': true },callback(req, res))
+  }
+  
+//   for (var i = 0; i < user.length; i++){
+//     if(user[i] == res.query.author)
+//   }
+
+//   if() { 
+//     post.findOneAndRemove({post: req.query.post}, {author: req.query.author}, function(err, cats) {
+//     if (err) {
+//       res.status(500).send("Something broke!");
+//       };
+//     });
+//   vas = {author:req.query.author, post: req.query.post};
+//   res.send(vas);
+//   }
+// }
+
+
 // burger.getOrder = function(req, res){
 
 //   var callback = function(req, res){

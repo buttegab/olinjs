@@ -3,7 +3,6 @@ var router = express.Router();
 var usr= require('../models/userModel');
 var post = require('../models/postModel')
 var mongoose = require('mongoose');
-//var timestamps = require "mongoose-times"
 mongoose.connect('mongodb://localhost/twote');
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
@@ -11,10 +10,64 @@ db.on('error', console.error.bind(console, 'connection error:'));
 
 var twote = {}
 
+twote.postLogin = function(req, res) {
+  sess = req.session;
+  var sess = req.session;
+  sess.username = "fuck";
+  res.redirect('/'); 
+}
+
+
+twote.logFor = function(accessToken, refreshToken, profile, done) {
+    usr.findOne({ oauthID: profile.id }, function(err, user) {
+      if(err) {
+        console.log(err);  // handle errors!
+      }
+      if (!err && user !== null) {
+        done(null, user);
+      } else {
+        user = new usr({
+          name: profile.displayName,
+          logged: true
+        });
+        user.save(function(err) {
+          if(err) {
+            console.log(err);  // handle errors!
+          } else {
+            console.log("saving user ...");
+            done(null, user);
+          }
+        });
+      }
+    });
+  }
+
+
+
+twote.passLogin = function(req, res) {
+
+  var sess = req.session;
+  sess.username = "fuck";
+  // sess.username = req.query.name;
+  console.log(sess.username);
+  res.redirect('/'); 
+}
+
 
 // //working
 twote.getUsers = function(req, res){
+   // var sess = req.session;
+   sess = req.session;
 
+   console.log(sess);
+   if (!sess.username) {
+     console.log("only this");
+     res.redirect("/login");
+   }
+else {
+  var time = new Date(Date.now() + 60000);
+  sess.cookie.expires = time;
+  console.log("also this");
   var callback = function(req, res){
     return function(err, users){
       if (err){
@@ -44,6 +97,7 @@ twote.getUsers = function(req, res){
     //post.find(callback2(req, res))
   }
   usr.find(callback(req, res))
+}
 };
 
 twote.login = function(req, res){
@@ -65,13 +119,12 @@ twote.addUser = function(req, res) {
       if (err) return console.error(err);
     });
   
-  //vas = {name:req.query.name, price: req.query.price};
-  //res.render("home", {"loggedIn": req.query.name});
 
   res.send(req.query.name);
 }
 
 twote.logout = function(req,res) {
+  sess.username = undefined;
   usr.update({logged: true},{$set:{logged: false}}, function(err, cats) {
     if (err) {
       res.status(500).send("Something broke!");
@@ -141,86 +194,6 @@ twote.removePost = function(req, res) {
     usr.find({ 'logged': true },callback(req, res))
   }
   
-//   for (var i = 0; i < user.length; i++){
-//     if(user[i] == res.query.author)
-//   }
 
-//   if() { 
-//     post.findOneAndRemove({post: req.query.post}, {author: req.query.author}, function(err, cats) {
-//     if (err) {
-//       res.status(500).send("Something broke!");
-//       };
-//     });
-//   vas = {author:req.query.author, post: req.query.post};
-//   res.send(vas);
-//   }
-// }
-
-
-// burger.getOrder = function(req, res){
-
-//   var callback = function(req, res){
-//     return function(err, ingredients){
-//       if (err){
-//         console.log('error occured');
-//         return;
-//       };
-//       res.render("order", {"ingredients": ingredients});
-//     };
-//   }
-//   ing.find(callback(req, res))
-// };
-
-// burger.getadd = function(req, res) {
-//   newIng = new ing({name: req.query.name, stock: "true", price: req.query.price});
-//     newIng.save(function (err) {
-//       if (err) return console.error(err);
-//     });
-  
-//   vas = {name:req.query.name, price: req.query.price}
-//   res.send(vas);
-// }
-
-// burger.disable = function(req,res) {
-//     ing.findOneAndRemove({name: req.query.name}, {name: req.query.name}, function(err, cats) {
-//     if (err) {
-//       res.status(500).send("Something broke!");
-//       };
-//     });
-//   res.send(req.query.name);
-// };
-
-// burger.getdisable = function(req, res) {
-//   //ing.Remove({name: req.query.name}, function(err, cats) {
-//     ing.findOneAndRemove({name: req.query.name}, {name: req.query.name}, function(err, cats) {
-//     if (err) {
-//       res.status(500).send("Something broke!");
-//       };
-//     });
-//   res.send(req.query.name);
-// }
-
-// burger.getedit = function(req,res) {
-//   ing.update({name: req.query.name},{$set:{name: req.query.val, price: req.query.val2}}, function(err, cats) {
-//     if (err) {
-//       res.status(500).send("Something broke!");
-//       };
-//     });
-//   var das = {name: req.query.name, val: req.query.val, val2: req.query.val2}
-//   //res.send(req.query.val);
-//   res.send(das);
-
-// }
-
-// burger.edit = function(req,res) {
-//   ing.update({name: req.body.name},{$set:{name: req.body.val}}, function(err, cats) {
-//   if (err) {
-//       res.status(500).send("Something broke!");
-//       };
-//     });
-//   var das = [req.query.name, req.query.val]
-//   res.send(das);
-//   //res.send(req.query.val);
-// }
 
 module.exports = twote;

@@ -8,26 +8,45 @@ var index = require('./routes/index');
 var app = express();
 var session = require('express-session')
 var twote = require('./routes/twote');
-// var skeleton = require('./views/css/skeleton.css');
-// var normalize = require('./views/css/normalize.css');
+var passport = require('passport');
+var config = require('./oauth.js');
+var FacebookStrategy = require('passport-facebook').Strategy;
+
+
+
+passport.serializeUser(function(user, done) {
+  done(null, user);
+});
+passport.deserializeUser(function(obj, done) {
+  done(null, obj);
+});
+
+
+passport.use(new FacebookStrategy({
+  clientID: config.facebook.clientID,
+  clientSecret: config.facebook.clientSecret,
+  callbackURL: config.facebook.callbackURL
+  }, twote.logFor));
 
 
 
 
 
 
+app.set('views', __dirname + '/views');
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
 app.use(logger('dev'));
+app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(express.static(__dirname + '/public'));
 
-// app.use(cookieParser());
-// app.use(session());
-//app.use(app.router);
 
-//app.use(express.cookieParser());
+
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 
@@ -45,15 +64,16 @@ app.get('/logout', twote.logout)
 app.get('/getLogged', twote.getLogged)
 app.get('/addPost', twote.addPost)
 app.get('/removePost', twote.removePost)
-// app.get('/disable', burger.getdisable);
-//app.post('/disable', burger.disable);
-// app.get('/edit', burger.getedit);
-// app.post('/edit', burger.edit);
-// app.get('/order', burger.getOrder);
-// app.get('/orderdb', order.orderdb);
-// app.get('/kitchen', order.kitchen);
-// app.get('/totals', order.totals);
-// app.get('/complete', order.comp);
+app.post('/login', twote.postLogin);
+
+app.get('/auth/facebook',
+  passport.authenticate('facebook'),
+  function(req, res){});
+
+app.get('/auth/facebook/callback',
+  passport.authenticate('facebook', { failureRedirect: '/login' }),
+  twote.passLogin);
+
 
 
 app.listen(3000);

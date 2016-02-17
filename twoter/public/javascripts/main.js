@@ -57,6 +57,11 @@ var onError = function(data, status) {
 
 $form1.submit(function(event) {
   event.preventDefault();
+  var data = "name="+ $form1.find("[type='text']").val();
+  var request = new XMLHttpRequest();
+  request.open('POST', '/login', true);
+  request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+  request.send(data);
   var name = $form1.find("[type='text']").val();
   
   console.log(name);
@@ -127,6 +132,16 @@ $("button[id|='remove']").on("click",function(event) {
     .done(onSuccess5)
     .error(onError);
 });
+
+// $form1.submit(function(event) {
+//   var data = "name="+ $form1.firstElementChild.value;
+//   var request = new XMLHttpRequest();
+//   request.open('POST', '/login', true);
+//   request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+//   request.send(data);
+// })
+
+
 
 // $(document).on("pagecontainerload",function(){
 //   alert("pagecontainerload event fired!");

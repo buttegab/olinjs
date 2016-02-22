@@ -1,3 +1,4 @@
+// You can come up with more descriptive names
 var $form1 = $("#ajax-form");
 var $form2 = $("#ajax-form2");
 var $form3 = $("#ajax-form3");
@@ -5,6 +6,7 @@ var $form4 = $("#ajax-form4");
 var $form5 = $("#ajax-form5");
 console.log("hello world");
 
+// And better here too
 var onSuccess = function(data, status) {
   $("#result").append("<div id='result'>"+data.name+": "+data.price+"$</div>");
 };

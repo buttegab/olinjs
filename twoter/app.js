@@ -4,7 +4,11 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var express = require('express');
-var index = require('./routes/index');
+// clean up the dependencies you're not using!
+// also, run `npm init` when you start so you have a `package.json` file --
+// that way, when you run `npm install --save whatever` the dependency info will
+// end up in the `package.json`, and people who work on/give you feedback on your app
+// will be able to run just `npm install` to get all of your dependencies in the same form you have them.
 var app = express();
 var session = require('express-session')
 var twote = require('./routes/twote');
@@ -50,7 +54,7 @@ app.use(express.static(__dirname + '/public'));
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-app.use(session({ 
+app.use(session({
   secret: 'superS3CRE7',
   resave: false,
   saveUninitialized: false ,
@@ -59,11 +63,11 @@ app.use(session({
 
 app.get('/', twote.getUsers);
 app.get('/login', twote.login);
-app.get('/newUser', twote.addUser)
-app.get('/logout', twote.logout)
-app.get('/getLogged', twote.getLogged)
-app.get('/addPost', twote.addPost)
-app.get('/removePost', twote.removePost)
+app.get('/newUser', twote.addUser); // technically this should be a post -- changes the server/database state
+app.get('/logout', twote.logout);
+app.get('/getLogged', twote.getLogged);
+app.get('/addPost', twote.addPost); // technically this should be a post
+app.get('/removePost', twote.removePost); // technically this should be a post
 app.post('/login', twote.postLogin);
 
 app.get('/auth/facebook',

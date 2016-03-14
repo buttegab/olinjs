@@ -1,5 +1,5 @@
 var $form1 = $("#ajax-form");
-var $form2 = $("#ajax-form2");
+var $form2 = $("#ajax-form2"); // more descriptive names, maybe? I have to go cross-reference the index.html file to figure out what these do
 var $form3 = $("#ajax-form3");
 var $form4 = $("#ajax-form4");
 var $form5 = $("#ajax-form5");
@@ -34,16 +34,17 @@ var onSuccess3 = function(data, status) {
 };
 
 var onSuccess4 = function(data, status) {
+  // Check out https://jsfiddle.net/swalters4925/e8gzd6h9/1/ for the way I like to add structured HTML to a page -- it's an option!
   $("li[id|='posts']").prepend("<li id = '"+data.author+"'>post: "+data.author+" posted: "+data.post+"</li>")
   console.log(data.post)
-  
+
 };
 
 var onSuccess5 = function(data, status) {
   //$("button[value|='"+data.post+"']").prop('disabled', true);
   $("button[value|='"+data.post+"']").hide();
   $("ul[name|='"+data.post+"']").replaceWith("");
-  
+
 };
 
 // var onSuccess6 = function(data, status) {
@@ -63,7 +64,7 @@ $form1.submit(function(event) {
   request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
   request.send(data);
   var name = $form1.find("[type='text']").val();
-  
+
   console.log(name);
   $.get("newUser", {
     name: name
@@ -85,7 +86,7 @@ $("input[name|='twote']").on("click", function(){
 $form2.submit(function(event) {
   event.preventDefault();
   //var name = $form1.find("[type='submit']").val();
-  
+
   //console.log(name);
   $.get("logout", {
     name: name
@@ -118,13 +119,13 @@ $("button[id|='remove']").on("click",function(event) {
   //var author = $("h3[id|='user']").val();
   var author = $(this).attr("name");
   var post = $(this).attr("value");
-  console.log("I tried");
+  console.log("I tried"); // yes indeed!
   console.log(author);
   console.log(post);
   //var post = $("input[name|='twote']").val();
   //console.log("clicked!")
   //console.log("this"+author);
-  
+
   $.get("removePost", {
     author: author,
     post: post
@@ -233,7 +234,7 @@ $("button[id|='remove']").on("click",function(event) {
 // //$form4.submit(function(event) {
 //   event.preventDefault();
 //   //var name = $form4.find( "button[type='submit']" ).attr("name");
-//   var name = $(this).attr("name");  
+//   var name = $(this).attr("name");
 //   console.log(name);
 //   $.get("complete", {
 //     name: name

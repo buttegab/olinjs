@@ -1,7 +1,7 @@
 require('./../../../app'); // to connect to the database
 var expect = require('chai').expect;
 var Cat = require('./../../../models/catModel');
-
+//Also not you db models
 describe('Cat Model', function() {
   it('should create a new cat', function(done) {
     var cat = new Cat({

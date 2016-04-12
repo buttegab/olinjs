@@ -1,6 +1,6 @@
 // var request = require('supertest');
 // var app = require('./../../app.js');
-
+//You should test client side code here. 
 describe("The app", function() {
   it('should return 200 OK on GET /', function(done) {
     request(app)
